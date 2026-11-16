@@ -41,8 +41,13 @@ def main():
     threshold = choose_threshold(y_valid, selected.predict_proba(x_valid)[:, 1])
     results = save_evaluation_artifacts(selected, x_valid, y_valid, x_test, y_test,
                                         METRICS_DIR, threshold)
+    training_ranges = {
+        column: {"min": float(x_train[column].min()), "max": float(x_train[column].max())}
+        for column in x_train.select_dtypes(include="number").columns
+    }
     metadata = {"selected_model": selected_name, "threshold": threshold,
-                "features": list(features.columns), "dataset_summary": summary, **results}
+                "features": list(features.columns), "dataset_summary": summary,
+                "training_ranges": training_ranges, **results}
     save_model(selected, metadata)
     print(f"Selected model: {selected_name}; validation threshold={threshold:.6f}")
     print(pd.Series(results["test"]).to_string())

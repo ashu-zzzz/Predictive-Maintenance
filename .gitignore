@@ -8,5 +8,4 @@ __pycache__/
 dataset/*.csv
 dataset/*.zip
 models/*.joblib
-results/**/*.csv
-results/**/*.json
+*.tmp

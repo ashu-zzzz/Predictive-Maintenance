@@ -5,8 +5,8 @@ import seaborn as sns
 from sklearn.inspection import permutation_importance
 from sklearn.metrics import (
     accuracy_score, average_precision_score, balanced_accuracy_score,
-    confusion_matrix, f1_score, precision_recall_curve, precision_score,
-    recall_score, roc_auc_score, roc_curve,
+    classification_report, confusion_matrix, f1_score, precision_recall_curve,
+    precision_score, recall_score, roc_auc_score, roc_curve,
 )
 
 def choose_threshold(y_true, scores):
@@ -40,6 +40,10 @@ def save_evaluation_artifacts(model, x_valid, y_valid, x_test, y_test,
     test = metrics_at_threshold(y_test, test_scores, threshold)
     pd.DataFrame([{"split": "validation", **valid}, {"split": "test", **test}]).to_csv(
         output_dir / "final_metrics.csv", index=False)
+    pd.DataFrame(classification_report(
+        y_test, (test_scores >= threshold).astype(int), output_dict=True,
+        zero_division=0
+    )).transpose().to_csv(output_dir / "classification_report.csv")
     sns.heatmap(confusion_matrix(y_test, test_scores >= threshold), annot=True, fmt="d", cmap="Blues")
     plt.title("Final test confusion matrix"); plt.tight_layout()
     plt.savefig(output_dir / "confusion_matrix.png", dpi=150); plt.close()

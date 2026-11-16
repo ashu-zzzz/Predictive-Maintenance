@@ -13,4 +13,7 @@ NUMERICAL_FEATURES = [
     "Rotational speed [rpm]", "Torque [Nm]", "Tool wear [min]",
 ]
 FEATURES = CATEGORICAL_FEATURES + NUMERICAL_FEATURES
+LEAKAGE_COLUMNS = [
+    "UDI", "Product ID", TARGET, "TWF", "HDF", "PWF", "OSF", "RNF"
+]
 RANDOM_STATE = 42
